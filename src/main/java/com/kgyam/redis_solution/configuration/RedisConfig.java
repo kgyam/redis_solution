@@ -5,10 +5,13 @@ import io.lettuce.core.ReadFrom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.DefaultLettucePool;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.scripting.support.ResourceScriptSource;
 
 
 /**
@@ -72,13 +75,14 @@ public class RedisConfig {
 
     /**
      * redis集群
-     *
+     * <p>
      * RedisClusterConfiguration can also be defined through PropertySource and has the following properties:
-     *
+     * <p>
      * Configuration Properties
      * spring.redis.cluster.nodes: Comma-delimited list of host:port pairs.
-     *
+     * <p>
      * spring.redis.cluster.max-redirects: Number of allowed cluster redirections.
+     *
      * @return
      */
 //    @Bean
@@ -88,5 +92,16 @@ public class RedisConfig {
 //
 //    }
 
+
+    /**
+     * @return
+     */
+    @Bean("redisScript")
+    public DefaultRedisScript<Long> defaultRedisScript() {
+        DefaultRedisScript<Long> defaultRedisScript = new DefaultRedisScript<>();
+        defaultRedisScript.setResultType(Long.class);
+//        defaultRedisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("lua/demo.lua")));
+        return defaultRedisScript;
+    }
 
 }
